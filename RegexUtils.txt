@@ -1,0 +1,183 @@
+--------------------------Format Debug Logs------------------------------------------------
+
+// Remove all non-debug lines
+[\n]^((?!USER_DEBUG).)*$
+
+// Remove beginning of Debug statements in logs
+[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{1,4} \([0-9]{6,12}\)\|USER_DEBUG\|\[[0-9]{1,4}\]\|DEBUG\|
+
+// remove all debug statements
+[\n]^.*(system.debug|console.log).*$
+
+// Select all lines that contain a substring
+[\n]^.*(substring).*$
+
+// Select all lines that contain a substring AND the following line break
+[\n]^.*(substring).*$\n^.*$
+
+--------------------------SOQL Formatting--------------------------------------------------
+
+// Capitalize SELECT in SOQL
+select(?=\s)
+replace: SELECT
+
+
+// Capitalize FROM/WHERE/ORDER BY/GROUP BY/AND/IN/DESC/ASC
+(?<=\s)from(?=\s)
+replace: FROM
+
+// ADVANCED (WIP)
+// Find SOQL keywords that are not immediately in the same line as an opening comment (won't work yet for multi-line comments, but close 9/30/21)
+(?<!(//|/\*|(\*)(\s)).*)(?<=[\s]|\[)(select|from|where|order by|group by|and|limit)(?=[\s]|[\r\n])
+
+replace: '\U$&'
+
+*Needs more work, or better yet, a script
+
+
+-----------------------Blank Lines, Spacing, Trailing Whitespace-------------------------
+
+// for/if without space before open parentheses
+(?<=for|if)([\(]|[{])
+replace: ' ('
+
+// no space before open bracket (looks for any non-whitespace character)
+(?<=[\S])\{
+replace: ' {'
+
+// no space after closing bracket (ie- }else{)
+\}(?=[\S])
+replace: '} '
+
+Step 1: Remove all trailing white space (after semicolon, any bracket, or a-z character)
+(?<=(;|\{|\}|\(|\)|[a-z]))[ |\t]+$
+replace: nothing
+
+Step 2: Remove double blank lines
+\n\n\n
+replace: \n\n
+
+Step 3: Remove space after open parenthesis/bracket, or before closing parenthesis/bracket
+((?<=(\(|\{)) )|( (?=(\)|\})))
+replace: nothing
+
+Step 4: Remove blank lines (except after closing bracket)
+(?<=[^}s])\n\n
+replace: \n
+******* not sure about this one, only use manually
+
+
+// remove ALL trailing spaces at the end of line after --> ; or { or } or ( or ) or a-z
+(?<=(;|\{|\}|\(|\)|[a-z]))[\s]+$
+replace: nothing
+
+
+--------------------Other Spacing Fixes-------------------------------------------------------
+
+// ':' or '=' or '+' without space before or after (skips timeformats)
+// Dynamically include match value (can apply same fix to multiple scenarios in the substitution)
+
+(?<![\s|hh|mm|ss|=|\+])(:|=|\+)(?![\s||hh|mm|ss|:|\+])
+replace: ' $& '
+
+
+// comma (,) not followed by space, apostrophe, or line break
+[,](?![\s|'|\n])
+REPLACE: ', '
+
+--------------------Other Notes------------------------------------------------------------
+
+Capitalize keywords like Map/String/List/Set/Integer/Double/Decimal/Boolean/Blob
+
+list<
+replace: List<
+
+--------------------Utility Snippets-------------------------------------------------------
+// Highlight ALL comments
+(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)
+
+
+// remove everything after a keyword (for that line)
+stringValue.*$
+
+// search for word and exclude strings before and after
+'(?<![map|(0-9)\s|do|courses])main(?![error|node])'
+
+// Find search term and remove term and everything after (until end of line)
+(searchTerm.*?)(.?)*
+
+// Remove ALL lines that contain a search term
+[\n]^((?!searchTerm).)*$
+
+
+//find all lines not starting with a number
+^[^0-9].*
+
+// remove numbers from front of lines
+^[0-9][0-9].  
+
+// Not whitespace
+[^\s]
+
+
+---------------Updating Profile Metadata -------------
+
+// Remove Apex Class reference from profile
+\n(\s)*<classAccesses>(\r|\n|\s)*<apexClass>(ApexClass1|ApexClass2)</apexClass>(\r|\n|\s)*<enabled>(true|false)<\/enabled>(\r|\n|\s)*<\/classAccesses>
+
+Replace: nothing
+
+
+// Remove VF Page reference from profile
+\n(\s)*<pageAccesses>(\r|\n|\s)*<apexPage>(VFPage1|VFPage2)</apexPage>(\r|\n|\s)*<enabled>(true|false)<\/enabled>(\r|\n|\s)*<\/pageAccesses>
+
+Replace: nothing
+
+// Find Field Permissions
+
+\n(\s)*<fieldPermissions>(\r|\n|\s)*<editable>(true|false)<\/editable>(\r|\n|\s)*<field>(ObjectName.FieldName1|ObjectName.FieldName2)</field>(\r|\n|\s)*<readable>(true|false)<\/readable>(\r|\n|\s)*<\/fieldPermissions>
+
+// Find "Empty FLS" settings in Permissions Sets (don't provide Read nor Edit access for a field)
+
+\n(\s)*<fieldPermissions>(\r|\n|\s)*<editable>(false)<\/editable>(\r|\n|\s)*<field>(.*)</field>(\r|\n|\s)*<readable>(false)<\/readable>(\r|\n|\s)*<\/fieldPermissions>
+
+Replace: nothing
+
+
+// Remove "Empty" Apex Class reference from profile (apex class included but not enabled)
+
+\n(\s)*<classAccesses>(\r|\n|\s)*<apexClass>(.*)</apexClass>(\r|\n|\s)*<enabled>false<\/enabled>(\r|\n|\s)*<\/classAccesses>
+
+Replace: nothing
+
+// Remove "Empty" VF Page references from profile (page included but not enabled)
+
+\n(\s)*<pageAccesses>(\r|\n|\s)*<apexPage>(.*)</apexPage>(\r|\n|\s)*<enabled>false<\/enabled>(\r|\n|\s)*<\/pageAccesses>
+
+Replace: nothing
+
+// Remove Field references from Profiles and Permission Sets
+
+\n(\s)*<fieldPermissions>(\r|\n|\s)*<editable>(false|true)<\/editable>(\r|\n|\s)*<field>(ObjectName.FieldName1|ObjectName.FieldName2)</field>(\r|\n|\s)*<readable>(false|true)<\/readable>(\r|\n|\s)*<\/fieldPermissions>
+
+// Remove Record Type assignments from Profiles/Permission Sets
+
+\n(\s)*<recordTypeVisibilities>(\r|\n|\s)*<default>(true|false)</default>(\r|\n|\s)*<recordType>(ObjectName.RecordTypeDevName1|ObjectName.RecordTypeDevName2)</recordType>(\r|\n|\s)*<visible>(true|false)</visible>(\r|\n|\s)*</recordTypeVisibilities>
+
+// Remove empty record type assignments
+
+\n(\s)*<recordTypeVisibilities>(\r|\n|\s)*<default>false</default>(\r|\n|\s)*<recordType>(.*)</recordType>(\r|\n|\s)*<visible>(false)</visible>(\r|\n|\s)*</recordTypeVisibilities>
+
+// Remove Page Layout Assignments from Profiles / Permission Sets
+
+\n(\s)*<layoutAssignments>(\r|\n|\s)*<layout>(ObjectName-Page Layout Name)</layout>(\r|\n|\s)*<recordType>(ObjectName.RecordTypeDevName)</recordType>(\r|\n|\s)*</layoutAssignments>
+
+Example- (doesn't matter the page layout name; only matches on record type)
+
+\n(\s)*<layoutAssignments>(\r|\n|\s)*<layout>(.*)</layout>(\r|\n|\s)*<recordType>(Task.LID__InMail|Task.LID__LinkedIn_Call|Task.LID__Message|Task.LID__PointDrive_Presentation_Created|Task.LID__PointDrive_Presentation_Viewed|Task.RFP)</recordType>(\r|\n|\s)*</layoutAssignments>
+
+// Remove empty Application Visibilities from Profiles
+
+\n(\s)*<applicationVisibilities>(\r|\n|\s)*<application>(.*)</application>(\r|\n|\s)*<default>false</default>(\r|\n|\s)*<visible>(false)</visible>(\r|\n|\s)*</applicationVisibilities>
+
+

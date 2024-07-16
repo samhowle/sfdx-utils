@@ -1,0 +1,27 @@
+// Territory utilities
+
+// Account assignments
+SELECT Id, Object.name, object.type, ObjectId, territory2.name, Territory2Id FROM ObjectTerritory2Association order by territory2.name desc
+
+// User territory assignments
+SELECT Id, Territory2Id, Territory2.name, user.name, userid, RoleInTerritory2 FROM UserTerritory2Association
+
+
+// Assign accounts to the United States of America territory
+Set<Id> usaAccountsAssigned = new Set<Id>();
+for (ObjectTerritory2Association> ota = [SELECT Id, ObjectId, Territory2Id FROM ObjectTerritory2Association
+		WHERE Territory2Id = '0MI7Q000000QL93WAG' AND Object.Type = 'Account']) {
+	usaAccountsAssigned.add(ota.ObjectId);
+}
+
+List<ObjectTerritory2Association> terr = new List<ObjectTerritory2Association>();
+for (account acc : [select id, parent_account_number__c, CCUST__c FROM account WHERE parent_account_number__c = '810357']) {
+	// Skip account if already has the territory assigned
+	if (usaAccountsAssigned.contains(acc.Id)) continue;
+	ObjectTerritory2Association ota = new ObjectTerritory2Association();
+	ota.ObjectId = acc.id;
+	ota.Territory2Id = '0MI7Q000000QL93WAG';
+	ota.AssociationCause = 'Territory2Manual';
+	terr.add(ota);
+}
+insert terr;

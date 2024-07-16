@@ -1,0 +1,166 @@
+{
+	"workbench.iconTheme": "vscode-icons",
+	"workbench.settings.openDefaultSettings": true,
+	"search.exclude": {
+		".sfdx/**" : true,
+		"**.dashboard-meta.xml" : true,
+	},
+	"search.showLineNumbers": true,
+	"editor.minimap.enabled": false,
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.renderWhitespace": "boundary",
+	"files.trimTrailingWhitespace": true,
+	"diffEditor.ignoreTrimWhitespace": true,
+	"prettier.tabWidth": 4,
+	"git.confirmSync": true,
+	"salesforcedx-vscode-core.retrieve-test-code-coverage": true,
+	"todohighlight.isEnable": true,
+	"todohighlight.isCaseSensitive": true,
+	"todohighlight.keywords": [
+
+		{
+			"text": "SKH:",
+			"color": "black",
+			"backgroundColor": "white",
+		},
+		{
+			"text": "TODO:",
+			"color": "red",
+			"outline": "red solid 1px",
+			"borderRadius": "0px", 		// Necessary to drop default so it goes right up to outline,
+			"backgroundColor": "white",
+			"fontWeight": "bold"
+
+		},
+		{
+			"text": "FIXME:",
+			"color": "white",
+			"outline": "red solid 1px",
+			"borderRadius": "0px", 		// Necessary to drop default so it goes right up to outline,
+			"backgroundColor": "red",
+			"fontWeight": "bold"
+
+		},
+		{
+			"text": "NOTE(string):", // with a regex pattern defined, this setting isn't used, but is useful as a name for this section
+			"regex": {
+				"pattern": "(?<=(\/\/|(\/\/\\s.*)))(NOTE|NOTES)[:|-|=]?(?!\\w)" // this allows for NOTE: or NOTE(Sam): etc (when inserted after '//' in comment)
+			},
+			"color": "black",
+			"outline": "white solid 1px",
+			"borderRadius": "0px", 		// Necessary to drop default so it goes right up to outline
+			"backgroundColor": "#52D272",
+			"fontWeight": "bold"
+		}
+	],
+	"todohighlight.defaultStyle": {
+		"color": "red",
+		"backgroundColor": "white",
+		"overviewRulerColor": "#ffab00",
+		"cursor": "pointer",
+		"border": "2px solid #eee",
+		"borderRadius": "2px",
+		"isWholeLine": false,
+	},
+	"todohighlight.include": [
+		"**/*.cls",
+		"**/*.trigger",
+		"**/*.js",
+		"**/*.jsx",
+		"**/*.ts",
+		"**/*.tsx",
+		"**/*.html",
+		"**/*.php",
+		"**/*.css",
+		"**/*.json",
+		"**/*.scss",
+		"**/*.xml"
+	],
+	"todohighlight.maxFilesForSearch": 5120,
+	"todohighlight.toggleURI": false,
+	"git.autofetch": true,
+	"salesforcedx-vscode-apex.java.home": "/Library/Java/JavaVirtualMachines/jdk-17.0.3.1.jdk/Contents/Home",
+	"ego.power-tools": {
+		"buttons": [
+			{
+				"text": "Tests with the editor",
+				"action": {
+					"type": "script",
+					"script": "test_button.js"
+				}
+			}
+		]
+	},
+	"files.associations": {
+		"*.apxc": "apex",
+		"*.cls": "apex",
+
+	},
+	"dx-code-companion.autosave.enabled": false,
+	"workbench.editor.decorations.badges": true,
+	"workbench.editor.decorations.colors": true,
+	"workbench.editor.untitled.hint": "hidden",
+	"[html]": {
+		"editor.defaultFormatter": "vscode.html-language-features"
+	},
+	"workbench.editor.wrapTabs": true,
+	"[json]": {
+
+		"editor.quickSuggestions": {
+			"strings": true
+		},
+		"editor.suggest.insertMode": "replace",
+		"gitlens.codeLens.scopes": [
+			"document"
+		],
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"security.workspace.trust.untrustedFiles": "open",
+	"terminal.integrated.tabs.hideCondition": "never",
+	"terminal.integrated.profiles.osx": {
+		"bash": {
+			"path": "bash",
+			"args": [
+				"-l"
+			],
+			"icon": "terminal-bash"
+		},
+		"zsh": {
+			"path": "zsh",
+			"args": [
+				"-l"
+			]
+		},
+		"fish": {
+			"path": "fish",
+			"args": [
+				"-l"
+			]
+		},
+		"tmux": {
+			"path": "tmux",
+			"icon": "terminal-tmux"
+		},
+		"pwsh": {
+			"path": "pwsh",
+			"icon": "terminal-powershell"
+		},
+		"sh": {
+			"path": "/bin/sh"
+		}
+	},
+	"terminal.integrated.defaultProfile.osx": "zsh",
+	"gitlens.blame.ignoreWhitespace": true,
+
+	"gitlens.remotes": [
+		{
+			"domain": "https://stash.corp.appnexus.com/projects/XAN/repos/app_sfdxappnexus",
+			"type": "Bitbucket"
+		}
+	],
+	"vsicons.dontShowNewVersionMessage": true,
+	"git-graph.dialog.merge.noFastForward": false,
+	"git-graph.dialog.pullBranch.noFastForward": false
+}

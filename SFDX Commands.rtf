@@ -1,0 +1,60 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2708
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red193\green193\blue193;
+\red183\green111\blue179;\red203\green203\blue202;\red193\green193\blue193;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c100000\c100000\c99985\c0;\cssrgb\c80176\c80176\c79976;
+\cssrgb\c77407\c52698\c75307;\cssrgb\c83320\c83320\c83112;\cssrgb\c80000\c80000\c80000;}
+\margl1440\margr1440\vieww17560\viewh8260\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 // Full Deployment - Validation Only\
+sfdx force:source:deploy -u APN_Production -p force-app/main/default -l RunLocalTests -c\
+\
+is the same as ----->\
+\
+sfdx force:source:deploy --targetusername Production --sourcepath force-app/main/default --testlevel RunLocalTests --checkonly \
+\
+-----------------------------------------------------------------------------------------------------------------\
+// Full Deployment\
+sfdx force:source:deploy -u Production -p force-app/main/default -l RunLocalTests \
+\
+-----------------------------------------------------------------------------------------------------------------\
+// Deploy specific Apex Class with specified test class\
+sfdx force:source:deploy -u QA -m ApexClass:AccountHelper -l  RunSpecifiedTests -r AccountTriggerTest\
+\
+-----------------------------------------------------------------------------------------------------------------\
+// Retrieve contents of a Change Set (saves as zip file in the directory specific in -r\
+sfdx force:mdapi:retrieve -u APN_UAT -p "Sams Change Set" -w 10 -r force-app/main/default\
+\
+----------------------------------------------------------------------------------------------------------------\
+// Deploy everything to Production\
+scripts/deploy.sh -c -u Production\
+\
+-----------------------------------------------------------------------------------------------------------------\
+// Clone repository to machine (from Terminal)\
+git clone https:stash.corp.appnexus.com/scm/xan/app_sfdxadworks.git\
+\
+// Refresh branches available to check out\
+git remote update \
+\
+\
+// Deploy full source with multiple specified test classes\
+sfdx force:source:deploy -p force-app/main/default -l RunSpecifiedTests -u APN_Production -r DealStagingImport_BatchTest,OrderItemTriggerTest,OpportunityLineItemTriggerTest,OpportunityTriggerTest\
+\
+// Deploy specific folder (ie- Apex Classes) with a specified test\
+sfdx force:source:deploy -u APN_Production -p force-app/main/default/classes --testlevel RunSpecifiedTests -r OrderItemTriggerTest\
+\
+// Deploy multiple files of same type (add test level if \
+sfdx force:source:deploy -u APN_Production -m ApexClass:OrderHandler,OpportunityHandler -l RunSpecifiedTests -r OrderTriggerTest,OpportunityTriggerTest\
+\
+\
+// Retrieve components from a change set (saves as zip file)\
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec4 sfdx force\cb3 \strokec5 :\cb3 \strokec4 mdapi\cb3 \strokec5 :\cb3 \strokec4 retrieve \cb3 \strokec6 -\cb3 \strokec4 p \cb3 \strokec6 <\cb3 \strokec4 NameOfChangeSet\cb3 \strokec6 >\cb3 \strokec4  \cb3 \strokec6 -\cb3 \strokec4 u \cb3 \strokec6 <\cb3 \strokec4 orgAlias\cb3 \strokec6 >\cb3 \strokec4  \cb3 \strokec6 -\cb3 \strokec4 r \cb3 \strokec6 <\cb3 \strokec4 directoryToSaveZipFile\cb3 \strokec6 >\cb3 \strokec4  \cb3 \strokec6 --\cb3 \strokec4 zipfilename \cb3 \strokec6 <\cb3 \strokec4 nameOfZipFile\cb3 \strokec6 >\cf7 \cb1 \strokec7 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+}
